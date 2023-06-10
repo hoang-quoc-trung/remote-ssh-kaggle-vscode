@@ -1,15 +1,16 @@
 # Install SSH
 
 ### Fist init ssh server
-bash install_ssh_server.sh your_public_key
 ```bash
+bash install_ssh_server.sh your_public_key
+
 # example
 bash install_ssh_server.sh https://raw.githubusercontent.com/hoangtrung020541/SSH_Key_public/main/authorized_keys
 ```
 
 ### Add user to ssh
-bash install_ssh_server.sh your_public_key
 ```bash
+bash install_ssh_server.sh your_public_key
 # example, this process will add new user to ssh while keeping the old user in ssh
 bash install_ssh_server.sh https://raw.githubusercontent.com/hoangtrung020541/SSH_Key_public/main/authorized_keys
 ```
