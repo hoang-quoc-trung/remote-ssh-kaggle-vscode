@@ -26,100 +26,100 @@ This repository provides a convenient way to remotely connect to Kaggle using Vi
 # 2. Generate SSH-key
 
 
-> **note:** Windows & Linux similar.
+> **Note:** Windows & Linux similar.
 
-- 2.1 Open Terminal.
+- **2.1** Open Terminal.
 
-- 2.2 Paste the text below:
+- **2.2** Paste the text below:
     ```bash
     ssh-keygen -t rsa
     ```
     ![](imgs/generate_ssh_key.png)
 
-- 2.3 Push SSH public key to GitHub
+- **2.3** Push SSH public key to GitHub
     - Rename linux_ssh to authorized_keys then upload it to a public repo on github like this one: [hoangtrung020541/SSH_Key_public](https://github.com/hoangtrung020541/SSH_Key_public)
 
 # 3. Environment settings
 
-- Move into Kaggle notebook: [Notebook Example](https://www.kaggle.com/hongtrung/ssh-kaggle-visualstudiocode)
+- **3.1** Move into Kaggle notebook: [Notebook Example](https://www.kaggle.com/hongtrung/ssh-kaggle-visualstudiocode)
 
-- Choose `Copy & Edit`:\
+- **3.2** Choose `Copy & Edit`:\
     ![](imgs/coppy_notebook.png)
 
-- Move into Ngrok and get tokens: [Ngrok](https://ngrok.com/)
+- **3.3** Move into Ngrok and get tokens: [Ngrok](https://ngrok.com/)
     ![](imgs/get_ngork.png)
 
-- Edit the `authtoken` to your ngrok token:\
+- **3.4** Edit the `authtoken` to your ngrok token:\
     ![](imgs/authtoken.png)
 
-- For `public_key_path`, go to the GitHub repo to save the SSH public key that you uploaded in step `2.3 `:\
+- **3.5** For `public_key_path`, go to the GitHub repo to save the SSH public key that you uploaded in step **2.3**:\
     ![](imgs/public_key_path.png)
 
-- Select `raw`:
+- **3.6** Select `raw`:
     ![](imgs/choose_row.png)
 
-- And save the above link to use:
+- **3.7** And save the above link to use:
     ![](imgs/choose_link.png)
 
-- In the right-hand bar, choose 1 of these 2 GPUs. TPU is not supported:\
+- **3.8** In the right-hand bar, choose 1 of these 2 GPUs. TPU is not supported:\
     ![](imgs/choose_gpu.png)
 
-- At `persistence`, select `Files only` to save files every time you Stop Session:\
+- **3.9** At `persistence`, select `Files only` to save files every time you Stop Session:\
     ![](imgs/persistence.png)
 
-- Run the notebook cells from top to bottom to the following cell then press the `stop` icon as shown in the picture:
+- **3.10** Run the notebook cells from top to bottom to the following cell then press the `stop` icon as shown in the picture:
     ![](imgs/run_bash_1.png)
 
-- Then re-run again, output like the following image is ok:
+- **3.11** Then re-run again, output like the following image is ok:
     ![](imgs/run_bash_2.png)
 
-- In the last cell, notice the red square, which is `HostName: 0.tcp.ap.ngrok.io` and `Port: 17520`. Make a note to use for step 4.
+- **3.12** In the last cell, notice the red square, which is `HostName: 0.tcp.ap.ngrok.io` and `Port: 17520`. Make a note to use for step **4.6**.
     ![](imgs/last_cell.png)
 
 # 4. Install SSH configuration on Visual Studio Code
 
-- Press `Ctrl Shift X`, search SSH and install the following 2 extentions:\
+- **4.1** Press `Ctrl Shift X`, search SSH and install the following 2 extentions:\
     ![](imgs/ssh_extention.png)
 
-- Note: How to SSH in detail see here (https://code.visualstudio.com/docs/remote/ssh)
+- **4.2** Note: How to SSH in detail see here (https://code.visualstudio.com/docs/remote/ssh)
 
-- Press `Ctrl Shift P` -> `Remote-SSH: Connect to Host…`\
+- **4.3** Press `Ctrl Shift P` -> `Remote-SSH: Connect to Host…`\
     ![](imgs/remote_ssh.png)
 
-- Press `Configure SSH Host…`\
+- **4.4** Press `Configure SSH Host…`\
     ![](imgs/choose_config.png)
 
-- Select `~/.ssh/config`, usually the first file.\
+- **4.5** Select `~/.ssh/config`, usually the first file.\
     ![](imgs/choose_config_file.png)
 
-- Add the following information to the config file:
+- **4.6** Add the following information to the config file:
     - Host: SSH's name, whatever you want
-    - HostName: Server's IP address (in step 4)
-    - Port: red number (in step 4)
+    - HostName: Server's IP address (in step **3.12**)
+    - Port: red number (in step **3.12**)
     - User: root (keep the same)
-    - IdentityFile: Path to private key (In step 2.2)\
+    - IdentityFile: Path to private key (in step **2.2**)\
     ![](imgs/config_screen.png)
 
-- Press `Ctrl S` and `Ctrl Shift P` -> `Remote-SSH: Connect to Host…`\
+- **4.7** Press `Ctrl S` and `Ctrl Shift P` -> `Remote-SSH: Connect to Host…`\
     ![](imgs/remote_ssh.png)
 
-- Press `Kaggle` that you named `Host: Kaggle`\
+- **4.8** Press `Kaggle` that you named `Host: Kaggle`\
     ![](imgs/connect_ssh.png)
 
-- Press `continue:\
+- **4.9** Press `continue:\
     ![](imgs/press_continue.png)
 
-- At the bottom left corner shows as shown in the picture that ssh was successful:\
+- **4.10** At the bottom left corner shows as shown in the picture that ssh was successful:\
     ![](imgs/connected.png)
 
 # 5. Using
 
-- Press `Ctrl K O` -> Enter the path `/kaggle` -> Press `ok`.\
+- **5.1** Press `Ctrl K O` -> Enter the path `/kaggle` -> Press `ok`.\
     ![](imgs/choose_dir.png)
 
-- Open terminal press `Ctrl J` -> enter `conda init` and turn it off and on again.
+- **5.2** Open terminal press `Ctrl J` -> enter `conda init` and turn it off and on again.
 
-- Check GPU `nvidia-smi`:\
+- **5.3** Check GPU `nvidia-smi`:\
     ![](imgs/check_gpu.png)
 
 # <font color="clay"> <p style="text-align:center"> Tips and Tricks </p> </font>
