@@ -13,9 +13,7 @@
 <br>
 
 This repository provides a convenient way to remotely connect to Kaggle using Visual Studio Code, enabling you to maximize the benefits of Kaggle's utilities. With this setup, you can maintain a continuous 12-hour session without interruptions. Additionally, you can extend the GPU usage from the default 30 hours per week to 42 hours by following a simple procedure (closing the notebook session at the end of the 29th hour, SSH back in, and maintain it for an additional 12 hours :v). This setup allows for easier usage of the terminal and debugging capabilities compared to the notebook interface provided by Kaggle. Furthermore, you can utilize and manage .`py files` effortlessly. And there are many more exciting features for you to explore!
-
 <br>
------------------------------------------------------------------
 
 # <font color="magenta"> <p style="text-align:center"> Getting Started </p> </font>
 
@@ -125,7 +123,7 @@ This repository provides a convenient way to remotely connect to Kaggle using Vi
 - Check GPU `nvidia-smi`:\
     ![](imgs/check_gpu.png)
 <br>
------------------------------------------------------------------
+
 # <font color="clay"> <p style="text-align:center"> Tips and Tricks </p> </font>
 
 Here are some tips and tricks to make the most out of your remote-SSH Kaggle setup:
@@ -139,7 +137,6 @@ Here are some tips and tricks to make the most out of your remote-SSH Kaggle set
     ![](imgs/file_relationship.png)
 
 
-<br>
 # Contributions
 Contributions to this repository are welcome! If you have any improvements, suggestions, or new features to add, feel free to open an issue or submit a pull request.
 
