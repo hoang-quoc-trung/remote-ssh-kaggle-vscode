@@ -1,3 +1,4 @@
+cd ..
 rm -r cuda
 mkdir cuda
 cd cuda
@@ -10,4 +11,3 @@ sudo apt-get update
 sudo apt-get -y install cuda
 sudo rm /bin/nvidia-smi
 sudo ln -s /opt/bin/nvidia-smi /bin/
-mamba init
