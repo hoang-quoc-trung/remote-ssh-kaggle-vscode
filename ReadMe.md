@@ -117,10 +117,27 @@ This repository provides a convenient way to remotely connect to Kaggle using Vi
 - **5.1** Press `Ctrl K O` -> Enter the path `/kaggle` -> Press `ok`.\
     ![](imgs/choose_dir.png)
 
-- **5.2** Open terminal press `Ctrl J` -> enter `conda init` and turn it off and on again.
+- **5.2** Open terminal press `Ctrl J` -> enter `conda init` -> press kill as shown in the picture.
+    ![](imgs/kill_conda_init.png)
 
-- **5.3** Check GPU `nvidia-smi`:\
+
+- **5.3** Install cuda:
+    - Run the following scripts in terminal to install cuda (`Ctrl J` to open terminal):
+        ```bash
+        cd /kaggle/working/remote-ssh-kaggle-vscode
+        bash install_cuda.sh
+        ```
+    - Select language and press OK as shown in the picture:
+    ![](imgs/cuda_config_language.png)
+
+
+- **5.4** Check GPU `nvidia-smi`:\
     ![](imgs/check_gpu.png)
+
+
+- **5.6** After each time stopping a session and running a new session notebook on Kaggle, you only need to perform the following operations in order to continue using: **3.10 -> 3.10 -> 3.11 -> 3.12 -> 4.3 -> 4.4 -> 4.5 -> 4.6 -> 4.7 -> 4.8 -> 4.9 -> 5.1 -> 5.2 -> 5.3 -> 5.4**.
+
+
 
 # <font color="clay"> <p style="text-align:center"> Tips and Tricks </p> </font>
 
@@ -134,8 +151,6 @@ Here are some tips and tricks to make the most out of your remote-SSH Kaggle set
     - `Output` is where you will work, corresponding to the dir of `/kaggle/working/...` Maximum storage memory is ~20GB.\
     ![](imgs/file_relationship.png)
 
-# Contributions
-Contributions to this repository are welcome! If you have any improvements, suggestions, or new features to add, feel free to open an issue or submit a pull request.
 
 # Conclusion
 With remote-SSH Kaggle using Visual Studio Code, you can unlock the full potential of Kaggle and enjoy a seamless development experience. Start leveraging the power of Kaggle's utilities while benefiting.
