@@ -28,7 +28,7 @@ This repository provides a convenient way to remotely connect to Kaggle using Vi
 
 > **Note:** Windows & Linux similar.
 
-- **2.1** Open Terminal.
+- **2.1** Open Terminal / Command Prompt.
 
 - **2.2** Paste the text below:
     ```bash
@@ -36,38 +36,44 @@ This repository provides a convenient way to remotely connect to Kaggle using Vi
     ```
     ![](imgs/generate_ssh_key.png)
 
+
 - **2.3** Push SSH public key to GitHub
-    - Rename linux_ssh to authorized_keys then upload it to a public repo on github like this one: [hoangtrung020541/SSH_Key_public](https://github.com/hoangtrung020541/SSH_Key_public)
+    - Move to the dir where the ssh-key is saved, rename the file **ssh_key.pub** to **authorized_keys**:
+    ![](imgs/rename_to_authorized_keys_1.png)
+    ![](imgs/rename_to_authorized_keys_2.png)
+    - Push file **authorized_keys** to GitHub and make it public, for example mine: [hoangtrung020541/SSH_Key_public](https://github.com/hoangtrung020541/SSH_Key_public)
 
 # 3. Environment settings
 
-- **3.1** Move into Kaggle notebook: [Notebook Example](https://www.kaggle.com/hongtrung/ssh-kaggle-visualstudiocode)
+- **3.1** Go to Kaggle notebook: [Notebook Example](https://www.kaggle.com/hongtrung/ssh-kaggle-visualstudiocode)
 
-- **3.2** Choose `Copy & Edit`:\
+- **3.2** Choose `Copy & Edit`:
     ![](imgs/coppy_notebook.png)
 
-- **3.3** Move into Ngrok and get tokens: [Ngrok](https://ngrok.com/)
-    ![](imgs/get_ngork.png)
-
-- **3.4** Edit the `authtoken` to your ngrok token:\
-    ![](imgs/authtoken.png)
-
-- **3.5** For `public_key_path`, go to the GitHub repo to save the SSH public key that you uploaded in step **2.3**:\
-    ![](imgs/public_key_path.png)
-
-- **3.6** Select `raw`:
-    ![](imgs/choose_row.png)
-
-- **3.7** And save the above link to use:
-    ![](imgs/choose_link.png)
-
-- **3.8** In the right-hand bar, choose 1 of these 2 GPUs. TPU is not supported:\
+- **3.3** In the right-hand bar, choose 1 of these 2 GPUs. TPU is not supported:
     ![](imgs/choose_gpu.png)
 
-- **3.9** At `persistence`, select `Files only` to save files every time you Stop Session:\
+- **3.4** At `persistence`, select `Files only` to save files every time you Stop Session:
     ![](imgs/persistence.png)
 
-- **3.10** Run the notebook cells from top to bottom to the following cell then press the `stop` icon as shown in the picture:
+
+- **3.5** Go to the GitHub repo to save the SSH public key that you uploaded in step **2.3** -> Select `raw`:
+    ![](imgs/choose_row.png)
+
+- **3.6** And coppy the above link:
+    ![](imgs/choose_link.png)
+
+- **3.7** For `public_key_path`, paste the link copied from step **3.6**:
+    ![](imgs/public_key_path.png)
+
+
+- **3.8** Go to [Ngrok](https://ngrok.com/) -> Your Authtoken -> press copy:
+    ![](imgs/get_ngork.png)
+
+- **3.9** Run the notebook cells from top to cell as shown in the picture, paste the Ngrok token saved from step **3.8** where the arrow points:
+    ![](imgs/add_ngrok_token.png)
+
+- **3.10** In this cell you have to run twice, press `stop` and run again:
     ![](imgs/run_bash_1.png)
 
 - **3.11** Then re-run again, output like the following image is ok:
@@ -97,24 +103,24 @@ This repository provides a convenient way to remotely connect to Kaggle using Vi
     - HostName: Server's IP address (in step **3.12**)
     - Port: red number (in step **3.12**)
     - User: root (keep the same)
-    - IdentityFile: Path to private key (in step **2.2**)\
-    ![](imgs/config_screen.png)
+    - IdentityFile: Path to private key (in step **2.2**)
+    ![](imgs/config_screen.png)s
 
-- **4.7** Press `Ctrl S` and `Ctrl Shift P` -> `Remote-SSH: Connect to Host…`\
+- **4.7** Press `Ctrl S` and `Ctrl Shift P` -> `Remote-SSH: Connect to Host…`
     ![](imgs/remote_ssh.png)
 
-- **4.8** Press `Kaggle` that you named `Host: Kaggle`\
+- **4.8** Press `Kaggle` that you named `Host: Kaggle`
     ![](imgs/connect_ssh.png)
 
-- **4.9** Press `continue:\
+- **4.9** Press `continue` (Note: If a list appears to select the operating system, please select `linux`):
     ![](imgs/press_continue.png)
 
-- **4.10** At the bottom left corner shows as shown in the picture that ssh was successful:\
+- **4.10** At the bottom left corner shows as shown in the picture that ssh was successful:
     ![](imgs/connected.png)
 
 # 5. Using
 
-- **5.1** Press `Ctrl K O` -> Enter the path `/kaggle` -> Press `ok`.\
+- **5.1** Press `Ctrl K O` -> Enter the path `/kaggle` -> Press `ok`.
     ![](imgs/choose_dir.png)
 
 - **5.2** Open terminal press `Ctrl J` -> enter `conda init` -> press kill as shown in the picture.
@@ -131,11 +137,11 @@ This repository provides a convenient way to remotely connect to Kaggle using Vi
     ![](imgs/cuda_config_language.png)
 
 
-- **5.4** Check GPU `nvidia-smi`:\
+- **5.4** Check GPU `nvidia-smi`:
     ![](imgs/check_gpu.png)
 
 
-- **5.6** After each time stopping a session and running a new session notebook on Kaggle, you only need to perform the following operations in order to continue using: **3.10 -> 3.10 -> 3.11 -> 3.12 -> 4.3 -> 4.4 -> 4.5 -> 4.6 -> 4.7 -> 4.8 -> 4.9 -> 5.1 -> 5.2 -> 5.3 -> 5.4**.
+- **5.6** After each time stopping a session and running a new session notebook on Kaggle, you only need to perform the following operations in order to continue using: **3.10 -> 3.11 -> 3.12 -> 4.3 -> 4.4 -> 4.5 -> 4.6 -> 4.7 -> 4.8 -> 4.9 -> 5.1 -> 5.2 -> 5.3 -> 5.4**.
 
 
 
@@ -148,7 +154,7 @@ Here are some tips and tricks to make the most out of your remote-SSH Kaggle set
 - Easily manage and work with .py files by organizing your code in a familiar file-based structure.
 - On the right bar of the `Data` section you will see 2 sections `Input` and `Output`:
     - With `Input` as the place to receive data from kaggle and you do not have the right to edit on visual studio code, the corresponding dir is `/kaggle/input/...` The maximum storage memory for your private data is ~107GB, and for public data is unlimited.
-    - `Output` is where you will work, corresponding to the dir of `/kaggle/working/...` Maximum storage memory is ~20GB.\
+    - `Output` is where you will work, corresponding to the dir of `/kaggle/working/...` Maximum storage memory is ~20GB.
     ![](imgs/file_relationship.png)
 
 
