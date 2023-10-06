@@ -1,4 +1,4 @@
-# Setup public - private key
+#!/bin/bash#
 cd ..
 rm -r cuda
 mkdir cuda
