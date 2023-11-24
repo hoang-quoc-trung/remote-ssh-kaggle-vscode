@@ -127,14 +127,19 @@ This repository provides a convenient way to remotely connect to Kaggle using Vi
     ![](imgs/kill_conda_init.png)
 
 
-- **5.3** Install cuda:
-    - Run the following scripts in terminal to install cuda (`Ctrl J` to open terminal):
+- **5.3** Activate cuda:
+    <!-- - Run the following scripts in terminal to install cuda (`Ctrl J` to open terminal):
         ```bash
         cd /kaggle/working/remote-ssh-kaggle-vscode
         bash install_cuda.sh
         ```
     - Select language and press OK as shown in the picture:
-    ![](imgs/cuda_config_language.png)
+    ![](imgs/cuda_config_language.png) -->
+
+    - Run the following scripts in terminal to activate cuda (`Ctrl J` to open terminal):
+        ```bash
+        sudo apt install nvidia-utils-515 -y
+        ```
 
 
 - **5.4** Check GPU `nvidia-smi`:
