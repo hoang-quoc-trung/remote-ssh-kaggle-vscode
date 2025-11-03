@@ -12,7 +12,18 @@
 
 <br>
 
-This repository provides a convenient way to remotely connect to Kaggle using Visual Studio Code, enabling you to maximize the benefits of Kaggle's utilities. With this setup, you can maintain a continuous 12-hour session without interruptions. Additionally, you can extend the GPU usage from the default 30 hours per week to 42 hours by following a simple procedure (closing the notebook session at the end of the 29th hour, SSH back in, and maintain it for an additional 12 hours :v). This setup allows for easier usage of the terminal and debugging capabilities compared to the notebook interface provided by Kaggle. Furthermore, you can utilize and manage .`py files` effortlessly. And there are many more exciting features for you to explore!
+This repository provides a convenient way to remotely connect to Kaggle using Visual Studio Code with **password authentication**, enabling you to maximize the benefits of Kaggle's utilities. With this setup, you can maintain a continuous 12-hour session without interruptions. Additionally, you can extend the GPU usage from the default 30 hours per week to 42 hours by following a simple procedure (closing the notebook session at the end of the 29th hour, SSH back in, and maintain it for an additional 12 hours :v). This setup allows for easier usage of the terminal and debugging capabilities compared to the notebook interface provided by Kaggle. Furthermore, you can utilize and manage .`py files` effortlessly. 
+
+**✨ Key Features:**
+- ✅ **Password Authentication** - No need to generate SSH keys!
+- ✅ **Modular Bash Scripts** - Easy to maintain and customize
+- ✅ **Includes Oh My Posh** - Beautiful terminal (optional)
+- ✅ **Simple Setup** - Just a few steps to get started
+
+**📝 How It Works:**
+The notebook clones this repository and uses bash scripts (`install_ssh_server.sh`, `add_ngrok_token.sh`, `run_ssh_server.sh`) to set up SSH server with password authentication.
+
+And there are many more exciting features for you to explore!
 <br>
 
 # <font color="magenta"> <p style="text-align:center"> Getting Started </p> </font>
@@ -23,111 +34,88 @@ This repository provides a convenient way to remotely connect to Kaggle using Vi
 - Download and install Visual Studio Code: https://code.visualstudio.com/ 
 - Create account Ngrok: https://ngrok.com/
 
-# 2. Generate SSH-key
+# 2. Environment settings
 
+- **2.1** Go to Kaggle notebook: [Notebook Example](https://www.kaggle.com/hongtrung/ssh-kaggle-visualstudiocode)
+    - Or upload `notebook_example.ipynb` from this repository
 
-> **Note:** Windows & Linux similar.
-
-- **2.1** Open Terminal / Command Prompt.
-
-- **2.2** Paste the text below:
-    ```bash
-    ssh-keygen -t rsa
-    ```
-    ![](imgs/generate_ssh_key.png)
-
-
-- **2.3** Push SSH public key to GitHub
-    - Move to the dir where the ssh-key is saved, rename the file **ssh_key.pub** to **authorized_keys**:
-    ![](imgs/rename_to_authorized_keys_1.png)
-    ![](imgs/rename_to_authorized_keys_2.png)
-    - Push file **authorized_keys** to GitHub and make it public, for example mine: [hoangtrung020541/SSH_Key_public](https://github.com/hoangtrung020541/SSH_Key_public)
-
-# 3. Environment settings
-
-- **3.1** Go to Kaggle notebook: [Notebook Example](https://www.kaggle.com/hongtrung/ssh-kaggle-visualstudiocode)
-
-- **3.2** Choose `Copy & Edit`:
+- **2.2** Choose `Copy & Edit`:
     ![](imgs/coppy_notebook.png)
 
-- **3.3** In the right-hand bar, choose 1 of these 2 GPUs. TPU is not supported:
+- **2.3** In the right-hand bar, choose 1 of these 2 GPUs. TPU is not supported:
     ![](imgs/choose_gpu.png)
 
-- **3.4** At `persistence`, select `Files only` to save files every time you Stop Session:
+- **2.4** At `persistence`, select `Files only` to save files every time you Stop Session:
     ![](imgs/persistence.png)
 
 
-- **3.5** Go to the GitHub repo to save the SSH public key that you uploaded in step **2.3** -> Select `raw`:
-    ![](imgs/choose_row.png)
-
-- **3.6** And coppy the above link:
-    ![](imgs/choose_link.png)
-
-- **3.7** For `public_key_path`, paste the link copied from step **3.6**:
-    ![](imgs/public_key_path.png)
-
-
-- **3.8** Go to [Ngrok](https://ngrok.com/) -> Your Authtoken -> press copy:
+- **2.4** Go to [Ngrok](https://ngrok.com/) -> Your Authtoken -> press copy:
     ![](imgs/get_ngork.png)
 
-- **3.9** Run the notebook cells from top to cell as shown in the picture, paste the Ngrok token saved from step **3.8** where the arrow points:
-    ![](imgs/add_ngrok_token.png)
+- **2.5** In cell 3 (the setup cell), set your SSH password and paste your Ngrok token:
+    ```python
+    ssh_password = "kaggle"  # Change this to your desired password
+    
+    # Run bash scripts
+    !bash install_ssh_server.sh $ssh_password
+    !bash add_ngrok_token.sh YOUR_NGROK_TOKEN  # Replace with your actual token
+    ```
 
-- **3.10** In this cell you have to run twice, press `stop` and run again:
-    ![](imgs/run_bash_1.png)
-
-- **3.11** Then re-run again, output like the following image is ok:
-    ![](imgs/run_bash_2.png)
-
-- **3.12** In the last cell, notice the red square, which is `HostName: 0.tcp.ap.ngrok.io` and `Port: 17520`. Make a note to use for step **4.6**.
+- **2.6** In the last cell (cell 4 - runs `bash run_ssh_server.sh`), notice the `HostName: 0.tcp.ap.ngrok.io` and `Port: 17520`. Make a note to use for step **3.6**.
     ![](imgs/last_cell.png)
 
-# 4. Install SSH configuration on Visual Studio Code
+# 3. Install SSH configuration on Visual Studio Code
 
-- **4.1** Press `Ctrl Shift X`, search SSH and install the following 2 extentions:\
+- **3.1** Press `Ctrl Shift X`, search SSH and install the following 2 extentions:\
     ![](imgs/ssh_extention.png)
 
-- **4.2** Note: How to SSH in detail see here (https://code.visualstudio.com/docs/remote/ssh)
+- **3.2** Note: How to SSH in detail see here (https://code.visualstudio.com/docs/remote/ssh)
 
-- **4.3** Press `Ctrl Shift P` -> `Remote-SSH: Connect to Host…`\
+- **3.3** Press `Ctrl Shift P` -> `Remote-SSH: Connect to Host…`\
     ![](imgs/remote_ssh.png)
 
-- **4.4** Press `Configure SSH Host…`\
+- **3.4** Press `Configure SSH Host…`\
     ![](imgs/choose_config.png)
 
-- **4.5** Select `~/.ssh/config`, usually the first file.\
+- **3.5** Select `~/.ssh/config`, usually the first file.\
     ![](imgs/choose_config_file.png)
 
-- **4.6** Add the following information to the config file:
-    - Host: SSH's name, whatever you want
-    - HostName: Server's IP address (in step **3.12**)
-    - Port: red number (in step **3.12**)
-    - User: root (keep the same)
-    - IdentityFile: Path to private key (in step **2.2**)
-    ![](imgs/config_screen.png)s
+- **3.6** Add the following information to the config file:
+    ```
+    Host Kaggle
+        HostName 0.tcp.ap.ngrok.io
+        Port 17520
+        User root
+    ```
+    - Host: SSH's name, whatever you want (e.g., "Kaggle")
+    - HostName: Server's IP address from step **2.6**
+    - Port: Port number from step **2.6**
+    - User: root (keep as root)
 
-- **4.7** Press `Ctrl S` and `Ctrl Shift P` -> `Remote-SSH: Connect to Host…`
+- **3.7** Press `Ctrl S` and `Ctrl Shift P` -> `Remote-SSH: Connect to Host…`
     ![](imgs/remote_ssh.png)
 
-- **4.8** Press `Kaggle` that you named `Host: Kaggle`
+- **3.8** Press `Kaggle` that you named `Host: Kaggle`
     ![](imgs/connect_ssh.png)
 
-- **4.9** Press `continue` (Note: If a list appears to select the operating system, please select `linux`):
+- **3.9** When prompted, enter the password you set in step **2.5** (default is `kaggle`)
+
+- **3.10** Press `continue` (Note: If a list appears to select the operating system, please select `linux`):
     ![](imgs/press_continue.png)
 
-- **4.10** At the bottom left corner shows as shown in the picture that ssh was successful:
+- **3.11** At the bottom left corner shows as shown in the picture that ssh was successful:
     ![](imgs/connected.png)
 
-# 5. Using
+# 4. Using
 
-- **5.1** Press `Ctrl K O` -> Enter the path `/kaggle` -> Press `ok`.
+- **4.1** Press `Ctrl K O` -> Enter the path `/kaggle` -> Press `ok`.
     ![](imgs/choose_dir.png)
 
-- **5.2** Open terminal press `Ctrl J` -> enter `conda init` -> press kill as shown in the picture.
+- **4.2** Open terminal press `Ctrl J` -> enter `conda init` -> press kill as shown in the picture.
     ![](imgs/kill_conda_init.png)
 
 
-- **5.3** Activate cuda:
+- **4.3** Activate cuda:
     <!-- - Run the following scripts in terminal to install cuda (`Ctrl J` to open terminal):
         ```bash
         cd /kaggle/working/remote-ssh-kaggle-vscode
@@ -142,11 +130,15 @@ This repository provides a convenient way to remotely connect to Kaggle using Vi
         ```
 
 
-- **5.4** Check GPU `nvidia-smi`:
+- **4.4** Check GPU `nvidia-smi`:
     ![](imgs/check_gpu.png)
 
 
-- **5.6** After each time stopping a session and running a new session notebook on Kaggle, you only need to perform the following operations in order to continue using: **3.10 -> 3.11 -> 3.12 -> 4.3 -> 4.4 -> 4.5 -> 4.6 -> 4.7 -> 4.8 -> 4.9 -> 5.1 -> 5.2 -> 5.3 -> 5.4**.
+- **4.5** After each time stopping a session and running a new session notebook on Kaggle, you only need to perform the following operations in order to continue using: 
+    - Run cell 4 to get new hostname and port
+    - Update your SSH config with new hostname/port (step 3.6)
+    - Connect via VS Code (steps 3.7 -> 3.8 -> 3.9)
+    - Continue working (steps 4.1 -> 4.2 -> 4.3 -> 4.4)
 
 
 
