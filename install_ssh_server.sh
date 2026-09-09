@@ -9,15 +9,27 @@ echo "Setting up SSH with password: $PASSWORD"
 # Set root password
 echo "root:$PASSWORD" | sudo chpasswd
 
-# Download ngrok (only if not already installed)
-if ! command -v ngrok &> /dev/null;
+# Download zrok v2 (only if not already installed)
+# Provides private TCP tunneling (tcpTunnel) used to expose the SSH server.
+# The laptop must also install zrok2 and run `zrok2 access private` (see ReadMe).
+ZROK_VERSION="v2.0.4"
+if ! command -v zrok2 &> /dev/null;
 then
-    echo "ngrok not found. Downloading..."
-    wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
-    sudo tar xvzf ngrok-v3-stable-linux-amd64.tgz -C /usr/local/bin
-    rm ngrok-v3-stable-linux-amd64.tgz
+    echo "zrok2 not found. Downloading ${ZROK_VERSION}..."
+    ARCH=$(uname -m)
+    case "$ARCH" in
+        x86_64) GOXARCH="amd64" ;;
+        aarch64|arm64) GOXARCH="arm64" ;;
+        *) echo "Unsupported architecture: $ARCH" >&2; exit 1 ;;
+    esac
+    TMP_DIR=$(mktemp -d)
+    wget -q "https://github.com/openziti/zrok/releases/download/${ZROK_VERSION}/zrok_${ZROK_VERSION#v}_linux_${GOXARCH}.tar.gz" -O "${TMP_DIR}/zrok.tar.gz"
+    tar -xzf "${TMP_DIR}/zrok.tar.gz" -C "${TMP_DIR}"
+    sudo install -o root -g root "${TMP_DIR}/zrok2" /usr/local/bin/zrok2
+    rm -rf "${TMP_DIR}"
+    zrok2 version
 else
-    echo "ngrok is already installed."
+    echo "zrok2 is already installed."
 fi
 
 # Install SSH-Server

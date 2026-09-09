@@ -17,7 +17,7 @@ bash install_ssh_server.sh [PASSWORD]
 
 **What it does:**
 1. Sets root password for SSH authentication
-2. Downloads and installs ngrok (if not already installed)
+2. Downloads and installs zrok v2 (`zrok2` binary, pinned version) if not already installed
 3. Installs OpenSSH server
 4. Configures SSH to allow:
    - Root login
@@ -34,31 +34,35 @@ ssh_password = "my_secure_password"
 
 ---
 
-### 2. `add_ngrok_token.sh`
-**Purpose:** Adds your ngrok authentication token
+### 2. `add_zrok_token.sh`
+**Purpose:** Enables the zrok environment with your zrok account token
 
 **Usage:**
 ```bash
-bash add_ngrok_token.sh YOUR_NGROK_TOKEN
+bash add_zrok_token.sh YOUR_ZROK_ACCOUNT_TOKEN
 ```
 
 **Parameters:**
-- `YOUR_NGROK_TOKEN`: Your ngrok authentication token from https://dashboard.ngrok.com/auth
+- `YOUR_ZROK_ACCOUNT_TOKEN`: Your zrok account token from https://myzrok.io (or your self-hosted zrok console)
 
 **What it does:**
-1. Configures ngrok with your authentication token
-2. Saves token to ngrok configuration file
+1. Verifies `zrok2` is installed (run `install_ssh_server.sh` first)
+2. Resets any existing environment in `~/.zrok2` (safe on ephemeral Kaggle)
+3. Runs `zrok2 enable` with your account token
+
+> Use the **same** zrok account on Kaggle and on your laptop. Private shares
+> default to closed permission mode, so same-account access just works.
 
 **Example:**
 ```python
 # In Kaggle notebook
-!bash add_ngrok_token.sh YOUR_NGROK_TOKEN
+!bash add_zrok_token.sh YOUR_ZROK_ACCOUNT_TOKEN
 ```
 
 ---
 
 ### 3. `run_ssh_server.sh`
-**Purpose:** Starts ngrok tunnel to expose SSH server
+**Purpose:** Starts a private zrok TCP tunnel exposing the SSH server
 
 **Usage:**
 ```bash
@@ -68,16 +72,25 @@ bash run_ssh_server.sh
 **Parameters:** None
 
 **What it does:**
-1. Starts ngrok TCP tunnel on port 22 (SSH)
-2. Uses Asia Pacific region (--region ap)
-3. Displays connection information (hostname and port)
+1. Starts an ephemeral private share: `zrok2 share private --headless --backend-mode tcpTunnel localhost:22`
+2. Prints a share token, e.g. `zrok2 access private abc123`
 
 **Output:**
 ```
-Forwarding: tcp://0.tcp.ap.ngrok.io:12345 -> localhost:22
+allow others to access your share with the following command:
+  zrok2 access private abc123
 ```
 
-Use the hostname (`0.tcp.ap.ngrok.io`) and port (`12345`) to connect via VS Code.
+Copy the token, then on your **laptop** (same zrok account, `zrok2` installed):
+```bash
+zrok2 access private --bind 127.0.0.1:2222 abc123
+ssh -p 2222 root@127.0.0.1
+```
+
+> Unlike ngrok, zrok TCP shares are private-only: there is no public
+> `HostName:Port`. The laptop must run `zrok2 access private`, and the VS Code
+> SSH config stays fixed at `HostName 127.0.0.1 / Port 2222`. Each run mints a
+> new token — reconnects just need the new token, not a new SSH config host.
 
 **Example:**
 ```python
@@ -95,16 +108,21 @@ Edit `install_ssh_server.sh` line 4:
 PASSWORD=${1:-"your_new_default_password"}
 ```
 
-### Change Ngrok Region
-Edit `run_ssh_server.sh` line 2:
+### Change Pinned zrok2 Version
+Edit `install_ssh_server.sh`:
 ```bash
-ngrok tcp 22 --region us  # or eu, au, etc.
+ZROK_VERSION="v2.0.4"
 ```
 
-Available regions: `us`, `eu`, `ap`, `au`, `sa`, `jp`, `in`
+### Change Local Bind Port
+On your laptop, pick any free local port:
+```bash
+zrok2 access private --bind 127.0.0.1:2222 <share-token>  # or e.g. 127.0.0.1:2223
+```
+Match the `Port` in your VS Code SSH config to whatever you bound.
 
 ### Add Additional SSH Configuration
-Edit `install_ssh_server.sh` after line 27, before `sudo service ssh restart`:
+Edit `install_ssh_server.sh` in the "SSH Config" section, before `sudo service ssh restart`:
 ```bash
 sudo echo "YourCustomConfig yes" >> /etc/ssh/sshd_config
 ```

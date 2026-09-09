@@ -21,7 +21,9 @@ This repository provides a convenient way to remotely connect to Kaggle using Vi
 - ✅ **Simple Setup** - Just a few steps to get started
 
 **📝 How It Works:**
-The notebook clones this repository and uses bash scripts (`install_ssh_server.sh`, `add_ngrok_token.sh`, `run_ssh_server.sh`) to set up SSH server with password authentication.
+The notebook clones this repository and uses bash scripts (`install_ssh_server.sh`, `add_zrok_token.sh`, `run_ssh_server.sh`) to set up SSH server with password authentication, then exposes port 22 through a private zrok TCP tunnel (`zrok2 share private --backend-mode tcpTunnel`).
+
+> **zrok vs ngrok:** zrok TCP shares are private-only, so there is no public `HostName:Port`. Your laptop runs `zrok2 access private --bind 127.0.0.1:2222 <share-token>` (same zrok account on both sides), and VS Code always connects to `127.0.0.1:2222`. Each share run mints a new token — reconnects only need the new token, not a new SSH config entry.
 
 And there are many more exciting features for you to explore!
 <br>
@@ -29,10 +31,14 @@ And there are many more exciting features for you to explore!
 # <font color="magenta"> <p style="text-align:center"> Getting Started </p> </font>
 
 
-# 1. Install Visual Studio Code and create account Ngrok
+# 1. Install Visual Studio Code, zrok, and create a zrok account
 
 - Download and install Visual Studio Code: https://code.visualstudio.com/ 
-- Create account Ngrok: https://ngrok.com/
+- Create a zrok account: https://myzrok.io/ (generous free tier) and copy your **account token** from the console
+- Install `zrok2` on your **laptop** (see https://docs.zrok.io/docs/getting-started) and enable it with the **same** account:
+    ```bash
+    zrok2 enable YOUR_ZROK_ACCOUNT_TOKEN
+    ```
 
 # 2. Environment settings
 
@@ -49,20 +55,22 @@ And there are many more exciting features for you to explore!
     ![](imgs/persistence.png)
 
 
-- **2.4** Go to [Ngrok](https://ngrok.com/) -> Your Authtoken -> press copy:
-    ![](imgs/get_ngork.png)
+- **2.4** Go to your zrok console (https://myzrok.io/) -> copy your **account token**
 
-- **2.5** In cell 3 (the setup cell), set your SSH password and paste your Ngrok token:
+- **2.5** In cell 3 (the setup cell), set your SSH password and enable zrok with your account token:
     ```python
     ssh_password = "kaggle"  # Change this to your desired password
     
     # Run bash scripts
     !bash install_ssh_server.sh $ssh_password
-    !bash add_ngrok_token.sh YOUR_NGROK_TOKEN  # Replace with your actual token
+    !bash add_zrok_token.sh YOUR_ZROK_ACCOUNT_TOKEN  # Replace with your actual token (same account as your laptop)
     ```
 
-- **2.6** In the last cell (cell 4 - runs `bash run_ssh_server.sh`), notice the `HostName: 0.tcp.ap.ngrok.io` and `Port: 17520`. Make a note to use for step **3.6**.
-    ![](imgs/last_cell.png)
+- **2.6** In the last cell (cell 4 - runs `bash run_ssh_server.sh`), copy the **share token** from output like `zrok2 access private <share-token>`. Then on your **laptop**, run:
+    ```bash
+    zrok2 access private --bind 127.0.0.1:2222 <share-token>
+    ```
+    Leave that command running and use `127.0.0.1:2222` for step **3.6**.
 
 # 3. Install SSH configuration on Visual Studio Code
 
@@ -80,16 +88,16 @@ And there are many more exciting features for you to explore!
 - **3.5** Select `~/.ssh/config`, usually the first file.\
     ![](imgs/choose_config_file.png)
 
-- **3.6** Add the following information to the config file:
+- **3.6** Add the following information to the config file (it never changes between sessions):
     ```
     Host Kaggle
-        HostName 0.tcp.ap.ngrok.io
-        Port 17520
+        HostName 127.0.0.1
+        Port 2222
         User root
     ```
     - Host: SSH's name, whatever you want (e.g., "Kaggle")
-    - HostName: Server's IP address from step **2.6**
-    - Port: Port number from step **2.6**
+    - HostName: `127.0.0.1` (your laptop-side `zrok2 access private --bind` endpoint)
+    - Port: `2222` (must match the `--bind` port)
     - User: root (keep as root)
 
 - **3.7** Press `Ctrl S` and `Ctrl Shift P` -> `Remote-SSH: Connect to Host…`
@@ -135,8 +143,8 @@ And there are many more exciting features for you to explore!
 
 
 - **4.5** After each time stopping a session and running a new session notebook on Kaggle, you only need to perform the following operations in order to continue using: 
-    - Run cell 4 to get new hostname and port
-    - Update your SSH config with new hostname/port (step 3.6)
+    - Run cell 4 to get a new share token
+    - On your laptop, restart `zrok2 access private --bind 127.0.0.1:2222 <new-share-token>` (SSH config stays the same)
     - Connect via VS Code (steps 3.7 -> 3.8 -> 3.9)
     - Continue working (steps 4.1 -> 4.2 -> 4.3 -> 4.4)
 
